@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 """
-Force the Twisted buildmaster to run a builds on all supported builders for
-a particular branch.
+Triggers Twisted buildmaster builds for a branch. By default it only operates
+with supported builders.
 """
 
 import sys

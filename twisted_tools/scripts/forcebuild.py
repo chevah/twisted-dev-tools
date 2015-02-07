@@ -1,9 +1,9 @@
 """
-Force the Twisted buildmaster to run a builds on all supported builders for
-a particular branch.
+Command line adapter for L{buildot.forceBuild}.
 """
 
 import os, pwd
+import webbrowser
 
 from twisted.python import usage
 from twisted.internet.defer import inlineCallbacks
@@ -13,11 +13,25 @@ from twisted_tools import buildbot, git
 class Options(usage.Options):
     synopsis = "force-build [options]"
 
-    optParameters = [['branch', 'b', None, 'Branch to build'],
-                     ['tests', 't', None, 'Tests to run'],
-                     ['comments', None, None, 'Build comments'],
-                     ]
+    optParameters = [
+        ['branch', 'b', None,
+            'Branch to build. By default it will trigger the current branch.'],
+        ['builder', None, None,
+            'Trigger specific builder. '
+            'By default it triggers all builders (supported or unsupported). '
+            'For unsupported builders you still need to explicitly pass the '
+            '-u flag even when a specific builder is asked.'],
+        ['tests', 't', None, 'Tests to run'],
+        ['comments', None, None, 'Comment associated with the build request.'],
+        ]
 
+    optFlags = [
+        ['open-browser', 'o',
+            'Open default web browser at builders page.'],
+        ['unsupported', 'u',
+            'Launch the unsupported builders. '
+            'By default it only operated with supported builders.'],
+        ]
 
 
 @inlineCallbacks
@@ -38,6 +52,18 @@ def main(reactor, *argv):
     reason = '%s: %s' % (pwd.getpwuid(os.getuid())[0], config['comments'])
 
     print 'Forcing...'
-    url = yield buildbot.forceBuild(config['branch'], reason, config['tests'], reactor=reactor)
+    url = yield buildbot.forceBuild(
+        config['branch'],
+        reason,
+        config['tests'],
+        reactor=reactor,
+        builder=config['builder'],
+        supported=not config['unsupported'],
+        )
     print 'Forced.'
-    print 'See %s for results' % (url,)
+
+    if config['open-browser']:
+        print 'A web browser page will be opened at\n%s' % (url,)
+        webbrowser.open(url)
+    else:
+        print 'See %s for results' % (url,)
