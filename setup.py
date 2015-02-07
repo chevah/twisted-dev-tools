@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='twisted-dev-tools',
-    version='0.0.2',
+    version='0.0.3',
     url='https://github.com/twisted/twisted-dev-tools',
     description="Tools for twisted development",
     license='MIT',
@@ -11,7 +11,7 @@ setup(
     packages=['twisted_tools', 'twisted_tools.scripts', 'twisted_tools.test'],
     scripts=[
         'bin/force-build',
-        'bin/mkbranch',
+        'bin/make-branch',
         'bin/fetch-ticket',
         'bin/review-tickets',
         'bin/get-attachment',
