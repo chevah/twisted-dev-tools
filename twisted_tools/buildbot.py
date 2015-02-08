@@ -3,7 +3,7 @@ import urllib
 import treq
 import twisted
 
-BASE_URL = 'http://buildbot.twistedmatrix.com'
+BASE_URL = 'https://buildbot.twistedmatrix.com'
 USER_AGENT = (
     "force-builds (%(name)s; %(platform)s) Twisted/%(twisted)s "
     "Python/%(python)s" % dict(
@@ -12,7 +12,7 @@ USER_AGENT = (
 
 
 
-def _getURLForBranch(branch, builder=None, supported=True):
+def _getURLForBranch(branch, builder='', supported=True):
     """
     Get URL for build results corresponding to a branch and an optional
     builder.
@@ -20,10 +20,11 @@ def _getURLForBranch(branch, builder=None, supported=True):
     When no builder is specified it returns the link to supported builders.
     """
     if supported:
-        base = 'boxes-supported?'
+        base = 'boxes-supported'
     else:
-        base = 'boxes-unsupported?'
-
+        base = 'boxes-unsupported'
+    base += '?'
+    
     if builder:
         base += 'builder=%s&' % (builder,)
 

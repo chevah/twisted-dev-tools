@@ -1,5 +1,5 @@
 """
-Command line adapter for L{buildot.forceBuild}.
+Command line adapter for triggering Buildbot builds.
 """
 
 import os, pwd
